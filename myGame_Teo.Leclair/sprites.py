@@ -101,7 +101,7 @@ class Platform(Sprite):
             if self.rect.x + self.rect.w > WIDTH or self.rect.x < 0:
                 self.speed = -self.speed
 
-# good mob represents mob that earns points
+# coin represents mob that earns points
 class Coin(Sprite):
     def __init__(self, x, y, w, h, kind):
         Sprite.__init__(self)
@@ -115,7 +115,7 @@ class Coin(Sprite):
     # def update(self):
     #     print("coin update")
 
-# bad mob represents mob that takes away health
+# bomb represents mob that takes away health
 class Bomb(Sprite):
     def __init__(self, game, x, y, w, h, kind):
         Sprite.__init__(self)
@@ -127,7 +127,7 @@ class Bomb(Sprite):
         self.rect.y = y
         self.kind = kind
         self.pos = vec(WIDTH/2, HEIGHT/2)
-        self.cd = Cooldown()
+        self.cd = Cooldown() #sets cooldwon for image timing
         self.tagged = False
     def seeking(self):
         if self.rect.x < self.game.player.rect.x:

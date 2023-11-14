@@ -24,5 +24,6 @@ BLUE = (0, 0, 255)
 PLATFORM_LIST = [(0, HEIGHT - 40, WIDTH, 40, "normal"),
                  (WIDTH / 2 - 50, HEIGHT * 3 / 4, 100, 20,"normal"),
                  (125, HEIGHT - 350, 100, 20, "moving"),
+                 (940, HEIGHT - 480, 60, 20, "moving"),
                  (222, 200, 100, 20, "normal"),
                  (175, 100, 50, 20, "normal")]

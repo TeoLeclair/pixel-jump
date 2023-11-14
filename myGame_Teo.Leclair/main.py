@@ -122,7 +122,7 @@ class Game:
             self.score = 0
         if self.coins_left == 0:
             self.coins_left = 10  # resetting coin counter
-            for c in range(0,10):
+            for c in range(0,10): # resets coins when first sets of coins are gone
                 c = Coin(randint(0, WIDTH), randint(0, math.floor(HEIGHT/2)), 20, 20, "normal")
                 self.all_sprites.add(c)
                 self.all_coins.add(c)
