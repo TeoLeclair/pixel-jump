@@ -43,6 +43,7 @@ class Game:
         self.clock = pg.time.Clock()
         self.running = True
     
+    
     def new(self):
         # create a group for all sprites
         self.score = 0    #starting score
@@ -51,6 +52,7 @@ class Game:
         self.all_mobs = pg.sprite.Group()
         self.all_coins = pg.sprite.Group()
         self.Coin = pg.sprite.Group() #added new new class for good and bad mobs
+        self.coins_left = 10
         # instantiate classes
         self.player = Player(self)
         # add instances to groups
@@ -59,21 +61,24 @@ class Game:
             bom = Bomb(self, randint(0, WIDTH), randint(0, math.floor(HEIGHT/2)), 20, 20, "normal")
             self.all_sprites.add(bom)
             self.all_mobs.add(bom)
-
+            # random placment of "bad" mobs
+        
         for p in PLATFORM_LIST:
             # instantiation of the Platform class
             plat = Platform(*p)
             self.all_sprites.add(plat)
             self.all_platforms.add(plat)
 
-# random placement for "good" mobs
         for c in range(0,10):
             c = Coin(randint(0, WIDTH), randint(0, math.floor(HEIGHT/2)), 20, 20, "normal")
             self.all_sprites.add(c)
             self.all_coins.add(c)
             self.Coin.add(c)
+# random placement for "good" mobs
 
-# random placment of "bad" mobs
+    
+
+
         
 
         self.run()  
@@ -115,6 +120,14 @@ class Game:
             self.player.pos = vec(WIDTH/2, HEIGHT/2)
             self.player.health = 5
             self.score = 0
+        if self.coins_left == 0:
+            self.coins_left = 10  # resetting coin counter
+            for c in range(0,10):
+                c = Coin(randint(0, WIDTH), randint(0, math.floor(HEIGHT/2)), 20, 20, "normal")
+                self.all_sprites.add(c)
+                self.all_coins.add(c)
+                self.Coin.add(c)
+
         pcollide  = pg.sprite.spritecollide(self.player, self.all_mobs, False)
         if pcollide:
             pcollide[0].cd.event_reset()

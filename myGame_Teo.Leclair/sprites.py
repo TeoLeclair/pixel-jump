@@ -76,6 +76,7 @@ class Player(Sprite):
         Coin = pg.sprite.spritecollide(self, self.game.all_coins, True)
         if Coin:
             self.game.score += 1
+            self.game.coins_left -=1
         
         
             
