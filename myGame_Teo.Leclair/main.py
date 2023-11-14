@@ -1,4 +1,7 @@
 # content from kids can code: http://kidscancode.org/blog/
+# content from Mr. Cozort
+# content from Sean
+# content from Joeseph Matan
 
 # GameDesign:
 # Goals -make new highs score, do not lose health, reach Point to gin score
@@ -42,14 +45,20 @@ class Game:
     
     def new(self):
         # create a group for all sprites
-        self.score = 0
+        self.score = 0    #starting score
         self.all_sprites = pg.sprite.Group()
         self.all_platforms = pg.sprite.Group()
         self.all_mobs = pg.sprite.Group()
+        self.all_coins = pg.sprite.Group()
+        self.Coin = pg.sprite.Group() #added new new class for good and bad mobs
         # instantiate classes
         self.player = Player(self)
         # add instances to groups
         self.all_sprites.add(self.player)
+        for i in range(0,10):
+            bom = Bomb(self, randint(0, WIDTH), randint(0, math.floor(HEIGHT/2)), 20, 20, "normal")
+            self.all_sprites.add(bom)
+            self.all_mobs.add(bom)
 
         for p in PLATFORM_LIST:
             # instantiation of the Platform class
@@ -57,12 +66,17 @@ class Game:
             self.all_sprites.add(plat)
             self.all_platforms.add(plat)
 
-        for m in range(0,10):
-            m = Mob(randint(0, WIDTH), randint(0, math.floor(HEIGHT/2)), 20, 20, "normal")
-            self.all_sprites.add(m)
-            self.all_mobs.add(m)
+# random placement for "good" mobs
+        for c in range(0,10):
+            c = Coin(randint(0, WIDTH), randint(0, math.floor(HEIGHT/2)), 20, 20, "normal")
+            self.all_sprites.add(c)
+            self.all_coins.add(c)
+            self.Coin.add(c)
 
-        self.run()
+# random placment of "bad" mobs
+        
+
+        self.run()  
     
     def run(self):
         self.playing = True
@@ -74,7 +88,10 @@ class Game:
 
     def update(self):
         self.all_sprites.update()
-
+        if self.player.pos.x < 0:
+            self.player.pos.x = WIDTH
+        if self.player.pos.x > WIDTH:
+            self.player.pos.x = 0
         # this is what prevents the player from falling through the platform when falling down...
         if self.player.vel.y >= 0:
             hits = pg.sprite.spritecollide(self.player, self.all_platforms, False)
@@ -88,12 +105,30 @@ class Game:
         elif self.player.vel.y <= 0:
             hits = pg.sprite.spritecollide(self.player, self.all_platforms, False)
             if hits:
-                self.player.acc.y = 5
-                self.player.vel.y = 0
+                self.player.acc.y = -10
+                self.player.vel.y = -10
                 print("ouch")
-                self.score -= 1
                 if self.player.rect.bottom >= hits[0].rect.top - 1:
                     self.player.rect.top = hits[0].rect.bottom
+        # resets player position, score, and health
+        if self.player.health == 0:
+            self.player.pos = vec(WIDTH/2, HEIGHT/2)
+            self.player.health = 5
+            self.score = 0
+        pcollide  = pg.sprite.spritecollide(self.player, self.all_mobs, False)
+        if pcollide:
+            pcollide[0].cd.event_reset()
+            print("collided....")
+            if pcollide[0].tagged == False:
+                print("the delta is " + str(pcollide[0].cd.delta))
+                print("tagged...FALSE")
+                pcollide[0].image = pg.image.load(os.path.join(img_folder, "explosive.png")).convert()
+                pcollide[0].image.set_colorkey(BLACK)
+                pcollide[0].tagged = True
+                self.player.health -= 1
+        
+                
+            
                     
 
     def events(self):
@@ -110,7 +145,7 @@ class Game:
         self.screen.fill(BLACK)
         # draw all sprites
         self.all_sprites.draw(self.screen)
-        # self.draw_text("health: " + str(self.health), 22, WHITE, WIDTH/2, HEIGHT/10)
+        self.draw_text("health: " + str(self.player.health), 22, WHITE, WIDTH/2, HEIGHT/10) 
         self.draw_text("score: " + str(self.score), 22, WHITE, WIDTH/2, HEIGHT/20)
         # buffer - after drawing everything, flip display
         pg.display.flip()
