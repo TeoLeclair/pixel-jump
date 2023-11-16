@@ -106,7 +106,7 @@ class Game:
                 self.player.vel.x = hits[0].speed*1.5
 
                     
-         # this prevents the player from jumping up through a platform
+         # this prevents the player from jumping up through a platform right away. The -10 delays the time of how fats it goes through
         elif self.player.vel.y <= 0:
             hits = pg.sprite.spritecollide(self.player, self.all_platforms, False)
             if hits:
@@ -115,7 +115,7 @@ class Game:
                 print("ouch")
                 if self.player.rect.bottom >= hits[0].rect.top - 1:
                     self.player.rect.top = hits[0].rect.bottom
-        # resets player position, score, and health
+        # resets player position, score, and health when health = 0
         if self.player.health == 0:
             self.player.pos = vec(WIDTH/2, HEIGHT/2)
             self.player.health = 5
@@ -135,10 +135,11 @@ class Game:
             if pcollide[0].tagged == False:
                 print("the delta is " + str(pcollide[0].cd.delta))
                 print("tagged...FALSE")
-                pcollide[0].image = pg.image.load(os.path.join(img_folder, "explosive.png")).convert()
+                pcollide[0].image = pg.image.load(os.path.join(img_folder, "explosive.png")).convert() #changes image from bomb to explosion
                 pcollide[0].image.set_colorkey(BLACK)
                 pcollide[0].tagged = True
-                self.player.health -= 1
+                self.player.health -= 1 #player health
+            
         
                 
             

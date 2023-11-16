@@ -72,7 +72,7 @@ class Player(Sprite):
         self.rect.midbottom = self.pos
         self.rect.midbottom = self.pos
             
-        # checks collisions of both "good" and "bad" mobs to then put down wether or not to gain a point or loose health
+        # checks collisions of both "good" mobs to then put down wether or not to gain a point and countdown coin counter
         Coin = pg.sprite.spritecollide(self, self.game.all_coins, True)
         if Coin:
             self.game.score += 1
